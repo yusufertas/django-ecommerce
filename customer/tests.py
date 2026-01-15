@@ -34,27 +34,13 @@ class CustomerApiTests(TestCase):
             phone="0987654321",
             password="secretpassword",
         )
-        self.url = "/api/customers"  # Note: trailing slash handling in standard routers often matters, but let's assume no trailing slash as per urls.py if defined that way.
-        # Wait, urls.py had `path("/customers" ...)` which is unusual for standard django (usually it's `customers/`).
-        # User defined: path("/customers", ...) in customer/urls.py
-        # And in ecommerce/urls.py: router.register(r"customers", ...) -> /api/customers/ (with trailing slash usually)
-        # Let's check ecommerce/urls.py again to be sure how it's routed.
-        # It used `router.register(r"customers", CustomerViewSet, basename="customers")`.
-        # So it should be `/api/customers/`. The user added `customer/urls.py` but also added it to router in `ecommerce/urls.py`.
-        # If both are active, it might be confusing.
-        # But `router.urls` is included under `api/`. So `/api/customers/` is the standard router path.
-        # I will use `/api/customers/`.
+        self.url = "/api/customers"
 
     def test_list_customers(self):
         # We need to construct URL correctly.
         url = "/api/customers/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Assuming JSON:API or standard DRF?
-        # User installed `django-rest-framework-jsonapi` and `requirements.txt` has it.
-        # And serializers have `JSONAPIMeta`.
-        # So the response might be JSON:API formatted.
-        # Standard valid JSON:API response check strictly might be hard, but let's check status at least.
 
     def test_create_customer(self):
         url = "/api/customers/"

@@ -62,9 +62,6 @@ class OrderApiTests(TestCase):
     def test_list_orders(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Assuming JSON:API format, it might be nested in 'data'.
-        # But simple len check on response.data works if it's a list or we inspect content.
-        # Let's assume standard response or check status mostly.
 
     def test_create_order(self):
         data = {
@@ -84,11 +81,6 @@ class OrderApiTests(TestCase):
         url = f"{self.url}{self.order.order_id}/"
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Check some field
-        # response.data['address'] might be directly accessible or inside 'attributes' for JSON:API
-        # For now, just status check is safe, or simple field check if not using json-api renderer
-        # actually settings.py has `rest_framework_json_api` installed but REST_FRAMEWORK settings NOT configured for it globally in typical way shown?
-        # Await test results.
 
     def test_update_order(self):
         url = f"{self.url}{self.order.order_id}/"
