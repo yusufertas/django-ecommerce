@@ -14,7 +14,7 @@ class Order(models.Model):
     address = models.CharField(max_length=225, default="", blank=True)
     phone = models.CharField(max_length=225, default="", blank=True)
     date = models.DateField(default=datetime.datetime.now)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.product.name} - {self.customer.first_name} {self.customer.last_name}"

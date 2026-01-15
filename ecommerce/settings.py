@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "order",
     "customer",
     "rest_framework",
+    "rest_framework_json_api",
+    "drf_spectacular",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -83,7 +86,15 @@ DATABASES = {
     }
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "My API",
+    "DESCRIPTION": "API documentation",
+    "VERSION": "1.0.0",
+}
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
