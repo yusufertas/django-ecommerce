@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from .models import Order
+from products.models import Product
+from customer.models import Customer
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+    customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())
 
     def create(self, validated_data):
         product_id = validated_data.pop("product_id")
