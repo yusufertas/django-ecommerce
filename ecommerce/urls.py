@@ -25,7 +25,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from products.views import ProductViewSet
+from products.views import ProductViewSet, CategoryViewSet
 from order.views import OrderViewSet
 from customer.views import CustomerViewSet
 
@@ -41,6 +41,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register(r"products", ProductViewSet, basename="products")
+router.register(r"category", CategoryViewSet, basename="category")
 router.register(r"orders", OrderViewSet, basename="orders")
 router.register(r"customers", CustomerViewSet, basename="customers")
 

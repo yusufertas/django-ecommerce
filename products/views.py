@@ -7,6 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotFound
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 
 
@@ -28,12 +29,13 @@ class ProductViewSet(
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = PageNumberPagination
+    parser_classes = (MultiPartParser, FormParser)
     view_tags = ["Products"]
 
     @swagger_auto_schema(responses={200: ProductSerializer(many=True)})
     def list(self, request, *args, **kwargs):
         return Response(
-            data=ProductSerializer(self.get_queryset(), many=True),
+            data=ProductSerializer(self.get_queryset(), many=True).data,
             status=status.HTTP_200_OK,
         )
 
@@ -41,7 +43,7 @@ class ProductViewSet(
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         product = get_object_or_404(Product, pk=pk)
-        return Response(data=ProductSerializer(product), status=status.HTTP_200_OK)
+        return Response(data=ProductSerializer(product).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={201: ProductSerializer})
     def create(self, request, *args, **kwargs):

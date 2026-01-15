@@ -1,6 +1,7 @@
 from django.urls import path
-from .serializers import ProductSerializer
+from .views import ProductViewSet, CategoryViewSet
 
 urlpatterns = [
     path("/products", ProductViewSet.as_view(), basename="products"),
+    path("/category", CategoryViewSet.as_view(), basename="category"),
 ]

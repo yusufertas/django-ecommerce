@@ -24,20 +24,25 @@ class CustomerViewSet(
 
     @swagger_auto_schema(responses={200: CustomerSerializer(many=True)})
     def list(self, request, *args, **kwargs):
-        return CustomerSerializer(self.get_queryset(), many=True)
+        return Response(
+            data=CustomerSerializer(self.get_queryset(), many=True).data,
+            status=status.HTTP_200_OK,
+        )
 
     @swagger_auto_schema(responses={200: CustomerSerializer})
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         customer = get_object_or_404(Customer, pk=pk)
-        return CustomerSerializer(customer)
+        return Response(
+            data=CustomerSerializer(customer).data, status=status.HTTP_200_OK
+        )
 
     @swagger_auto_schema(responses={201: CustomerSerializer})
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return serializer
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(responses={200: CustomerSerializer})
     def partial_update(self, request, *args, **kwargs):
@@ -46,11 +51,14 @@ class CustomerViewSet(
         serializer = self.get_serializer(customer, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return serializer
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={204: CustomerSerializer})
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         customer = get_object_or_404(Customer, pk=pk)
         customer.delete()
-        return {"message": "Customer deleted successfully"}
+        return Response(
+            data={"message": "Customer deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )

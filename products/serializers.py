@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 from .models import Product, Category
 
 
@@ -13,11 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-
-    def create(self, validated_data):
-        category_id = validated_data.pop("category_id")
-        category = Category.objects.get(category_id=category_id)
-        return Product.objects.create(category=category, **validated_data)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
@@ -31,8 +28,24 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = (
+            "product_id",
+            "category",
+            "name",
+            "slug",
+            "image",
+            "description",
+            "price",
+            "stock",
+            "available",
+            "created_at",
+            "updated_at",
+        )
         ref_name = "ProductSerializer"
+        extra_kwargs = {
+            "category": {"required": True},
+            "product_id": {"read_only": True},
+        }
 
     class JSONAPIMeta:
         resource_name = "products"

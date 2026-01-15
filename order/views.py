@@ -25,20 +25,23 @@ class OrderViewSet(
 
     @swagger_auto_schema(responses={200: OrderSerializer(many=True)})
     def list(self, request, *args, **kwargs):
-        return OrderSerializer(self.get_queryset(), many=True)
+        return Response(
+            data=OrderSerializer(self.get_queryset(), many=True).data,
+            status=status.HTTP_200_OK,
+        )
 
     @swagger_auto_schema(responses={200: OrderSerializer})
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         order = get_object_or_404(Order, pk=pk)
-        return OrderSerializer(order)
+        return Rsponse(data=OrderSerializer(order).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={201: OrderSerializer})
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return serializer
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     @swagger_auto_schema(responses={200: OrderSerializer})
     def partial_update(self, request, *args, **kwargs):
@@ -47,11 +50,14 @@ class OrderViewSet(
         serializer = self.get_serializer(order, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return serializer
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={204: OrderSerializer})
     def destroy(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         order = get_object_or_404(Order, pk=pk)
         order.delete()
-        return {"message": "Order deleted successfully"}
+        return Response(
+            data={"message": "Order deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
