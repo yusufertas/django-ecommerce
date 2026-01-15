@@ -9,10 +9,8 @@ class OrderSerializer(serializers.ModelSerializer):
     customer_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())
 
     def create(self, validated_data):
-        product_id = validated_data.pop("product_id")
-        customer_id = validated_data.pop("customer_id")
-        product = Product.objects.get(product_id=product_id)
-        customer = Customer.objects.get(customer_id=customer_id)
+        product = validated_data.pop("product_id")
+        customer = validated_data.pop("customer_id")
         return Order.objects.create(
             product=product, customer=customer, **validated_data
         )
@@ -30,6 +28,10 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = "__all__"
         ref_name = "OrderSerializer"
+        extra_kwargs = {
+            "product": {"read_only": True},
+            "customer": {"read_only": True},
+        }
 
     class JSONAPIMeta:
         resource_name = "orders"

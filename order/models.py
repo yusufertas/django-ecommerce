@@ -13,7 +13,7 @@ class Order(models.Model):
     price = models.IntegerField()
     address = models.CharField(max_length=225, default="", blank=True)
     phone = models.CharField(max_length=225, default="", blank=True)
-    date = models.DateField(default=datetime.datetime.now)
+    date = models.DateField(default=datetime.date.today)
     status = models.BooleanField(default=True)
 
     def __str__(self):

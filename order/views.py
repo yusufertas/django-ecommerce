@@ -34,7 +34,7 @@ class OrderViewSet(
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
         order = get_object_or_404(Order, pk=pk)
-        return Rsponse(data=OrderSerializer(order).data, status=status.HTTP_200_OK)
+        return Response(data=OrderSerializer(order).data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={201: OrderSerializer})
     def create(self, request, *args, **kwargs):
