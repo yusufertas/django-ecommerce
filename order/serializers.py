@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Order
 from products.models import Product
 from customer.models import Customer
+from rest_framework.exceptions import NotFound
+from django.shortcuts import get_object_or_404
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -26,12 +28,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = [
+            "product_id",
+            "customer_id",
+            "quantity",
+            "price",
+            "address",
+            "phone",
+            "status",
+        ]
         ref_name = "OrderSerializer"
-        extra_kwargs = {
-            "product": {"read_only": True},
-            "customer": {"read_only": True},
-        }
 
     class JSONAPIMeta:
         resource_name = "orders"
